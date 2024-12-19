@@ -1,0 +1,312 @@
+import tensorflow as tf 
+
+from tensorflow import keras 
+
+import matplotlib.pyplot as plt 
+
+%matplotlib inline 
+
+import numpy as np 
+
+ 
+
+(X_train, y_train) , (X_test, y_test) = keras.datasets.mnist.load_data() 
+
+
+len(X_train) 
+
+ 
+
+len(X_test) 
+
+X_train[0].shape 
+
+ 
+
+X_train[0] 
+
+ 
+
+plt.matshow(X_train[0]) 
+
+ 
+
+y_train[0] 
+
+ 
+
+X_train = X_train / 255 
+
+X_test = X_test / 255 
+
+X_train[0] 
+
+ 
+
+X_train_flattened = X_train.reshape(len(X_train), 28*28) 
+
+X_test_flattened = X_test.reshape(len(X_test), 28*28) 
+
+X_train_flattened.shape 
+
+ 
+
+X_train_flattened[0] 
+
+ 
+
+model = keras.Sequential([ 
+
+    keras.layers.Dense(10, input_shape=(784,), activation='sigmoid') 
+
+]) 
+
+ 
+
+model.compile(optimizer='adam', 
+
+              loss='sparse_categorical_crossentropy', 
+
+              metrics=['accuracy']) 
+
+ 
+
+model.fit(X_train_flattened, y_train, epochs=5) 
+
+ 
+
+model.evaluate(X_test_flattened, y_test) 
+
+ 
+
+ 
+
+y_predicted = model.predict(X_test_flattened) 
+
+y_predicted[0] 
+
+ 
+
+plt.matshow(X_test[0]) 
+
+np.argmax(y_predicted[0]) 
+
+y_predicted_labels = [np.argmax(i) for i in y_predicted] 
+
+y_predicted_labels[:5] 
+
+ 
+
+cm = tf.math.confusion_matrix(labels=y_test,predictions=y_predicted_labels) 
+
+cm 
+
+ 
+
+ 
+
+ 
+
+model = keras.Sequential([ 
+
+keras.layers.Dense(100, input_shape=(784,), activation='relu'), 
+
+keras.layers.Dense(10, activation='sigmoid') 
+
+]) 
+
+ 
+
+model.compile(optimizer='adam', 
+
+loss='sparse_categorical_crossentropy', 
+
+metrics=['accuracy']) 
+
+ 
+
+model.fit(X_train_flattened, y_train, epochs=5) 
+
+ 
+
+ 
+
+ 
+
+model.evaluate(X_test_flattened,y_test) 
+
+ 
+
+y_predicted = model.predict(X_test_flattened) 
+
+y_predicted_labels = [np.argmax(i) for i in y_predicted] 
+
+cm = tf.math.confusion_matrix(labels=y_test,predictions=y_predicted_labels) 
+
+ 
+
+plt.figure(figsize = (10,7)) 
+
+sn.heatmap(cm, annot=True, fmt='d') 
+
+plt.xlabel('Predicted') 
+
+plt.ylabel('Truth') 
+
+ 
+
+ 
+
+model = keras.Sequential([ 
+
+keras.layers.Flatten(input_shape=(28, 28)), 
+
+keras.layers.Dense(100, activation='relu'), 
+
+keras.layers.Dense(10, activation='sigmoid') 
+
+]) 
+
+ 
+
+model.compile(optimizer='adam', 
+
+loss='sparse_categorical_crossentropy', 
+
+metrics=['accuracy']) 
+
+ 
+
+model.fit(X_train, y_train, epochs=10) 
+
+ 
+
+model.evaluate(X_test,y_test) 
+
+ 
+
+model_c = keras.Sequential([ 
+
+keras.layers.Dense(16, input_shape=(784,), activation='sigmoid'), 
+
+keras.layers.Dense(16, activation='sigmoid'), 
+
+keras.layers.Dense(10, activation='sigmoid') 
+
+]) 
+
+ 
+
+model_c.compile(optimizer='adam',  
+
+loss='sparse_categorical_crossentropy',  
+
+metrics=['accuracy']) 
+
+ 
+
+history_c= model_c.fit(X_train_flattened, y_train, epochs=10) 
+
+ 
+
+y_predicted = model_c.predict(X_test_flattened) 
+
+y_predicted_labels = [np.argmax(i) for i in y_predicted] 
+
+ 
+
+from sklearn.metrics import classification_report 
+
+ 
+
+# Generate the classification report 
+
+report = classification_report(y_test, y_predicted_labels, digits=4) 
+
+print(report) 
+
+ 
+
+ 
+
+model_d = keras.Sequential([ 
+
+keras.layers.Dense(22, input_shape=(784,), activation='sigmoid'), # More neurons in 1st layer 
+
+keras.layers.Dense(19, activation='sigmoid'), # 2nd layer 
+
+keras.layers.Dense(11, activation='sigmoid'), # Additional layer 
+
+keras.layers.Dense(10, activation='sigmoid') # Output layer 
+
+]) 
+
+ 
+
+model_d.compile(optimizer='adam',  
+
+loss='sparse_categorical_crossentropy',  
+
+metrics=['accuracy']) 
+
+ 
+
+history_d=model_d.fit(X_train_flattened, y_train, epochs=5) 
+
+
+y_predicted = model_d.predict(X_test_flattened) 
+
+y_predicted_labels = [np.argmax(i) for i in y_predicted] 
+
+ 
+model_e = keras.Sequential([ 
+
+keras.layers.Dense(16, input_shape=(784,), activation='relu'), 
+
+keras.layers.Dense(16, activation='relu'), 
+
+keras.layers.Dense(10, activation='sigmoid') 
+
+]) 
+
+ 
+
+model_e.compile(optimizer='adam',  
+
+loss='sparse_categorical_crossentropy',  
+
+metrics=['accuracy']) 
+
+ 
+
+history_e=model_e.fit(X_train_flattened, y_train, epochs=10) 
+
+ 
+
+import matplotlib.pyplot as plt 
+
+
+def plot_accuracy(history, title): 
+
+plt.plot(history.history['accuracy'], label='Training Accuracy') 
+
+plt.title(title) 
+
+plt.xlabel('Epochs') 
+
+plt.ylabel('Accuracy') 
+
+plt.legend() 
+
+plt.show() 
+ 
+
+plot_accuracy(history_c, "Model C: Accuracy vs Epochs") 
+
+plot_accuracy(history_d, "Model D: Accuracy vs Epochs") 
+
+plot_accuracy(history_e, "Model E: Accuracy vs Epochs") 
+
+ 
+
+ 
