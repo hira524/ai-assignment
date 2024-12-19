@@ -1,0 +1,29 @@
+ 
+
+import matplotlib.pyplot as plt 
+
+ 
+
+def plot_accuracy(history, title): 
+
+plt.plot(history.history['accuracy'], label='Training Accuracy') 
+
+plt.title(title) 
+
+plt.xlabel('Epochs') 
+
+plt.ylabel('Accuracy') 
+
+plt.legend() 
+
+plt.show() 
+
+ 
+
+plot_accuracy(history_c, "Model C: Accuracy vs Epochs") 
+
+plot_accuracy(history_d, "Model D: Accuracy vs Epochs") 
+
+plot_accuracy(history_e, "Model E: Accuracy vs Epochs") 
+
+ 
